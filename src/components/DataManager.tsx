@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-export type Food = { id: string; name: string; category?: "breakfast"|"lunch"|"dinner"|"snack" };
-export type DislikedFood = Food & { level: "mild" | "moderate" | "absolute" };
-export type Allergy = { id: string; label: string; severity: "mild" | "severe" };
+export type Food = { id: string; name: string; category?: "breakfast"|"lunch"|"dinner"|"snack"; source?: string; };
+export type DislikedFood = { id: string; name: string; level: "mild" | "moderate" | "absolute"; source?: string; };
+export type Allergy = { id: string; label: string; severity: "mild" | "severe"; source?: string; };
 export type Elder = { 
   id: string; 
   name: string; 

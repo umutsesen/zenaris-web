@@ -21,7 +21,7 @@ import {
   getDislikeLevelText,
   getSeverityText,
   PrefsSchema 
-} from "./utils/data-validation-utils";
+} from "./utils/validation";
 import { AIFavoritesList } from "./components/ai/AIFavoritesList";
 import { EnhancedAllergyList } from "./components/ai/EnhancedAllergyList";
 import { EnhancedDislikesList } from "./components/ai/EnhancedDislikesList";
@@ -320,7 +320,7 @@ export default function App() {
                       <AIFavoritesList 
                         items={favorites}
                         onAdd={(n,c)=>{
-                          safeAddFavorite(n, c as 'breakfast' | 'lunch' | 'dinner' | 'snack' | undefined, favorites, dislikes, (name, category) => {
+                          safeAddFavorite(n, c as 'breakfast' | 'lunch' | 'dinner' | 'snack' | undefined, (name, category) => {
                             const newItem = {id:uid(),name,category};
                             setFavorites(p=>[...p,newItem] as Food[]);
                             addChange('added', 'favorites', `Added "${name}" to favorites`);
@@ -369,8 +369,8 @@ export default function App() {
                       {/* Manual Entry & List */}
                       <EnhancedDislikesList 
                         items={dislikes}
-                        onAdd={(n,l)=>{
-                          safeAddDislike(n, l, favorites, dislikes, (name, level) => {
+                        onAdd={(n: string, l: "mild" | "moderate" | "absolute")=>{
+                          safeAddDislike(n, l, (name: string, level: "mild" | "moderate" | "absolute") => {
                             const newItem = {id:uid(),name,level};
                             setDislikes(p=>[...p,newItem]);
                             addChange('added', 'dislikes', `Added "${name}" to avoid list (${getDislikeLevelText(level)})`);
@@ -419,8 +419,8 @@ export default function App() {
                       {/* Manual Entry & List */}
                       <EnhancedAllergyList 
                         items={allergies}
-                        onAdd={(l,s)=>{
-                          safeAddAllergy(l, s, allergies, (label, severity) => {
+                        onAdd={(l: string, s: "mild" | "severe")=>{
+                          safeAddAllergy(l, s, (label: string, severity: "mild" | "severe") => {
                             const newItem = {id:uid(),label,severity};
                             setAllergies(p=>[...p,newItem]);
                             addChange('added', 'allergies', `Added "${label}" allergy (${getSeverityText(severity)})`);

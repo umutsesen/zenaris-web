@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import { VoiceAdd } from './VoiceAdd';
 import { PasteIngredients } from './PasteIngredients';
 import { toast } from 'sonner';
-import { Food } from '../DataManager';
+import type { Food } from '../DataManager';
 
 export interface AIActionsBarProps {
   onAddFavorite?: (item: Food) => void;
@@ -26,9 +26,9 @@ export function AIActionsBar({
   const handleVoiceResult = (text: string) => {
     if (onAddFavorite && text.trim()) {
       onAddFavorite({
+        id: Math.random().toString(36).slice(2, 9),
         name: text.trim(),
-        category: '', 
-        source: 'voice'
+        category: undefined
       });
     }
   };
@@ -37,9 +37,9 @@ export function AIActionsBar({
     items.forEach(item => {
       if (onAddFavorite && item.trim()) {
         onAddFavorite({
+          id: Math.random().toString(36).slice(2, 9),
           name: item.trim(),
-          category: '',
-          source: 'paste'
+          category: undefined
         });
       }
     });

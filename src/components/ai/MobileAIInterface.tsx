@@ -276,7 +276,16 @@ export function MobileAIInterface({
 
   const handleAddSelected = () => {
     const selectedItems = previewItems.filter((item) => item.selected);
-    onAdd(selectedItems as (Food | DislikedFood | Allergy)[]);
+    const convertedItems = selectedItems.map(item => {
+      if (item.type === 'favorite') {
+        return { id: item.id, name: item.text, category: item.category as "breakfast"|"lunch"|"dinner"|"snack"|undefined } as Food;
+      } else if (item.type === 'avoid') {
+        return { id: item.id, name: item.text, level: item.level || 'mild' } as DislikedFood;
+      } else {
+        return { id: item.id, label: item.text, severity: item.severity || 'mild' } as Allergy;
+      }
+    });
+    onAdd(convertedItems);
     setStep('success');
 
     // Start undo timer

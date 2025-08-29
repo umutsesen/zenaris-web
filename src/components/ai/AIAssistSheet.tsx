@@ -18,6 +18,8 @@ import { PasteIngredients } from './PasteIngredients';
 import { toast } from 'sonner';
 import type { Food, DislikedFood, Allergy } from '../DataManager';
 
+const generateId = () => Math.random().toString(36).slice(2, 9);
+
 interface AIAssistSheetProps {
   elderName?: string;
   onAddItem?: (item: Food | DislikedFood | Allergy) => void;
@@ -57,13 +59,35 @@ export function AIAssistSheet({
 
   const handleVoiceResult = (text: string) => {
     if (onAddItem && text.trim()) {
-      onAddItem({
-        name: text.trim(),
-        category: type === 'favorites' ? '' : undefined,
-        severity: type === 'allergies' ? 'mild' : undefined,
-        level: type === 'dislikes' ? 'mild' : undefined,
-        source: 'voice'
-      });
+      const trimmedName = text.trim();
+      let item: Food | DislikedFood | Allergy;
+      
+      if (type === 'favorites') {
+        item = {
+          id: generateId(),
+          name: trimmedName,
+          category: undefined,
+          source: 'voice'
+        } as Food;
+      } else if (type === 'dislikes') {
+        item = {
+          id: generateId(),
+          name: trimmedName,
+          level: 'mild' as const,
+          source: 'voice'
+        } as DislikedFood;
+      } else if (type === 'allergies') {
+        item = {
+          id: generateId(),
+          label: trimmedName,
+          severity: 'mild' as const,
+          source: 'voice'
+        } as Allergy;
+      } else {
+        return;
+      }
+      
+      onAddItem(item);
     }
     setActiveFeature(null);
   };
@@ -71,13 +95,35 @@ export function AIAssistSheet({
   const handlePasteResult = (items: string[]) => {
     items.forEach(item => {
       if (onAddItem && item.trim()) {
-        onAddItem({
-          name: item.trim(),
-          category: type === 'favorites' ? '' : undefined,
-          severity: type === 'allergies' ? 'mild' : undefined,
-          level: type === 'dislikes' ? 'mild' : undefined,
-          source: 'paste'
-        });
+        const trimmedName = item.trim();
+        let newItem: Food | DislikedFood | Allergy;
+        
+        if (type === 'favorites') {
+          newItem = {
+            id: generateId(),
+            name: trimmedName,
+            category: undefined,
+            source: 'paste'
+          } as Food;
+        } else if (type === 'dislikes') {
+          newItem = {
+            id: generateId(),
+            name: trimmedName,
+            level: 'mild' as const,
+            source: 'paste'
+          } as DislikedFood;
+        } else if (type === 'allergies') {
+          newItem = {
+            id: generateId(),
+            label: trimmedName,
+            severity: 'mild' as const,
+            source: 'paste'
+          } as Allergy;
+        } else {
+          return;
+        }
+        
+        onAddItem(newItem);
       }
     });
     setActiveFeature(null);

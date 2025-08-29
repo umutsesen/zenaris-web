@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 // Type definitions
-export type DislikeLevel = 'mild' | 'moderate' | 'strong' | 'absolute';
-export type SeverityLevel = 'mild' | 'moderate' | 'severe';
+export type DislikeLevel = 'mild' | 'moderate' | 'absolute';
+export type SeverityLevel = 'mild' | 'severe';
 
 // Zod schemas
 export const PrefsSchema = z.object({
@@ -47,8 +47,6 @@ export function getSeverityText(severity: SeverityLevel): string {
 export function safeAddFavorite(
   name: string,
   category: string | undefined,
-  currentFavorites: unknown[],
-  currentDislikes: unknown[],
   onSuccess: (name: string, category: string | undefined) => void
 ) {
   const trimmedName = name.trim();
@@ -60,8 +58,6 @@ export function safeAddFavorite(
 export function safeAddDislike(
   name: string,
   level: DislikeLevel,
-  currentFavorites: unknown[],
-  currentDislikes: unknown[],
   onSuccess: (name: string, level: DislikeLevel) => void
 ) {
   const trimmedName = name.trim();
@@ -73,7 +69,6 @@ export function safeAddDislike(
 export function safeAddAllergy(
   label: string,
   severity: SeverityLevel,
-  currentAllergies: unknown[],
   onSuccess: (label: string, severity: SeverityLevel) => void
 ) {
   const trimmedLabel = label.trim();
