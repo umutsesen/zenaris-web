@@ -386,3 +386,12 @@ select:focus-visible {
     margin-top: 1rem !important;
   }
 }
+input {
+  border: 1.25px solid #103a3a;
+}
+
+/* Ensure Radix Select trigger (button[role="combobox"]) matches input border */
+[data-slot="select-trigger"],
+.select-trigger {
+  border: 1.25px solid #103a3a !important;
+}

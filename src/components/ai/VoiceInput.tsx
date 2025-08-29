@@ -2,6 +2,11 @@ import { useState, useRef } from 'react';
 import { Mic, MicOff, Loader2 } from 'lucide-react';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
+import { useIsMobile } from '../../utils/use-mobile';
+import { Sheet, SheetContent } from '../ui/sheet';
+import Lottie from 'lottie-react';
+import dictationAnimation from '../../assets/dictation.json';
+import { Button } from '../ui/button';
 
 type VoiceState = 'idle' | 'listening' | 'transcribing' | 'error';
 
@@ -27,6 +32,7 @@ export function VoiceInput({
   const [voiceState, setVoiceState] = useState<VoiceState>('idle');
   const [, setMicPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
   const inputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
 
   const startListening = async () => {
     if (disabled) return;
@@ -101,7 +107,7 @@ export function VoiceInput({
   };
 
   return (
-    <div className="relative">
+  <div className="relative">
       <Input
         ref={inputRef}
         value={value}
@@ -137,6 +143,22 @@ export function VoiceInput({
           {voiceState === 'transcribing' && 'Çevriliyor…'}
           {voiceState === 'error' && 'Mikrofon izni gerekli'}
         </div>
+      )}
+
+  {isMobile && voiceState === 'listening' && (
+    <Sheet open onOpenChange={(open) => { if (!open) stopListening(); }}>
+          <SheetContent side="bottom" className="w-full p-0 border-t bg-white">
+            <div className="flex flex-col items-center justify-center p-6 gap-4">
+              <div className="w-48 h-48">
+                <Lottie animationData={dictationAnimation} loop autoplay />
+              </div>
+              <div className="text-sm text-muted-foreground">Listening… tap close to stop</div>
+      <Button variant="outline" size="lg" onClick={() => stopListening()}>
+                Close
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
       )}
     </div>
   );

@@ -556,7 +556,7 @@ export function MobileAIInterface({
           <X className="h-4 w-4" />
         </Button>
       </div>
-      <div className="flex-1 overflow-hidden p-4 space-y-3">
+      <div className="flex-1 overflow-hidden p-4 space-y-3 bg-white">
          <div className="space-y-3 mb-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-medium">AI Extracted Items</h3>
